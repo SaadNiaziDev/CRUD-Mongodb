@@ -8,7 +8,7 @@ const model = require('./models/curd');
 app.use(express.json());
 app.set('view engine', 'ejs');
 
-mongoose.connect('mongodb+srv://Xdlotera1:1122334455@hello-hey.gf6iy.mongodb.net/test');
+mongoose.connect('mongodb://localhost:27017/test');
 
 app.get('/', function(req, res) {
     res.render('show');
@@ -50,6 +50,38 @@ app.get('/sort', function(req, res){
             res.send(err);
         })
 
+});
+
+
+
+
+app.delete('/delete', function(req, res){
+    model.deleteOne({name:req.body.name})
+        .then((response) =>{
+            res.send(response);
+        })
+        .catch((err) =>{
+            res.send(err);
+        })
+
+});
+
+app.put('/replace', function(req, res){
+    model.findOne({name:req.body.name},(err, data)=>{
+        if(!err && data){
+            data.age=req.body.age;
+            console.log(data, req.body.age)
+            data.save((err, data) => {
+                res.send("oks");
+            });
+        }
+        else{
+            res.send("not found!");
+        }
+    })
+
 })
+
+
 
 app.listen(3000);

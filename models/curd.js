@@ -13,7 +13,7 @@ const curdSchema = new Schema({
     rollNumber: {
         type: 'string',
         required:"true",
-    }
+    },
 })
 
 const CurdModel = mongoose.model('CurdModel',curdSchema);
