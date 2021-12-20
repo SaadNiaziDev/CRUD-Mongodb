@@ -31,7 +31,7 @@ app.get('/add', function(req, res){
 });
 
 app.get('/show', function(req, res){
-    model.find()
+    model.find().limit(1)
         .then((response) =>{
             res.send(response);
         })
@@ -67,21 +67,26 @@ app.delete('/delete', function(req, res){
 });
 
 app.put('/replace', function(req, res){
-    model.findOne({name:req.body.name},(err, data)=>{
+    model.findOneAndUpdate({name:'usman'},{name:req.body.name,age:req.body.age},(err,data)=>{
         if(!err && data){
-            data.age=req.body.age;
-            console.log(data, req.body.age)
-            data.save((err, data) => {
-                res.send("oks");
-            });
+            res.send(data);
         }
         else{
-            res.send("not found!");
+            console.log('Error');
+        }
+})
+});
+
+app.put('/updateMany', function(req, res){
+    model.updateMany({age:{$gt:"20"}},{$set:{age:'00'}},(err, data) => {
+        if(!err && data){
+            res.send(data);
+        }
+        else{
+            console.log('Error');
         }
     })
-
 })
-
 
 
 app.listen(3000);
