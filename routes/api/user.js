@@ -32,12 +32,13 @@ router.post('/login',function(req, res,next) {
     try {
         User.findOne({email:req.body.email},(err, data)=>{
             if(!err && data){
+                console.log(data.validPassword(req.body.password));
                 if(data.validPassword(req.body.password)){
-                    res.send(data.toAuthJSON());
+                    console.log(data.toAuthJSON())
+                    next(new OkResponse(data.toAuthJSON()));
                 }else{
-                    res.send("Password is invalid")
+                    next(new BadRequestResponse("Password Mismatch"));
                 }
-                //next(new OkResponse(data.toAuthJSON()));
             }else if(err){
                 next(new BadRequestResponse("Fail to Login"));
             }
